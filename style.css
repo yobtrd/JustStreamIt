@@ -1,0 +1,96 @@
+/* Général */
+* {
+    margin: 0;
+}
+
+main {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+h2 {
+    color: #000000;
+    font-size: 48px;
+    font-family: "Oswald", sans-serif;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Bannière */
+header {
+    display: flex;
+    width: 90%;
+    max-width: 1200px;
+    height: 122px;
+    align-items: center;
+    background-color: #61787F;
+    border: 1px solid #000000;
+    margin: auto;
+    margin-top: 40px;
+    margin-bottom: 10px;
+
+}
+
+header h1 {
+    display: block;
+    color: #FFFFFF;
+    font-size: 40px;
+    font-family: "Oswald", sans-serif;
+    font-weight: 300;
+}   
+
+.logo {
+    width: 125px;
+    height: 94px;
+    margin-left: 20px;
+    margin-right: 40px;
+}
+
+
+/* Meilleur film */
+.bestMovie {
+    width: 100%;
+    box-sizing: border-box;
+    border: 6px solid #000000;
+    display: flex; 
+}
+
+.bestMovie img {
+    margin: 10px 15px 10px 15px;
+    width: 227px;
+    height: 334px;
+}
+
+.bestMovieContent {
+    display: flex;
+    flex-direction: column;
+    margin-right: 30px;
+    margin-left: 20px;
+}
+
+.bestMovieContent p {
+    text-align: justify;
+    color: #000000;
+    font-size: 28px;
+    font-family: "Oswald", sans-serif;
+    font-weight: 200;
+}
+
+.bestMovieContent .cta {
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 166px;
+    height: 68px;
+    background-color: #FA0B0B;
+    border-radius: 25px;
+    color: #FFFFFF;
+    font-size: 24px;
+    font-family: "Oswald", sans-serif;
+    font-weight: 500;
+    text-decoration: none;
+    margin-top: 20px;
+}
