@@ -1,0 +1,5 @@
+displayBestFilmData()
+displayBestRatedFilmsData()
+displayBestFilmByGenreData("Horror", "#film-category-one")
+displayBestFilmByGenreData("Action", "#film-category-two")
+displayUserChoiceGenreData()
