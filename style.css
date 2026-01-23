@@ -1,4 +1,4 @@
-/* Général */
+/* General */
 * {
     margin: 0;
 }
@@ -18,7 +18,7 @@ h2 {
     margin-bottom: 10px;
 }
 
-/* Bannière */
+/* Banner */
 header {
     display: flex;
     width: 90%;
@@ -49,28 +49,28 @@ header h1 {
 }
 
 
-/* Meilleur film */
-.bestMovie {
+/* Best film*/
+.bestFilm {
     width: 100%;
     box-sizing: border-box;
     border: 6px solid #000000;
     display: flex; 
 }
 
-.bestMovie img {
+.bestFilm img {
     margin: 10px 15px 10px 15px;
     width: 227px;
     height: 334px;
 }
 
-.bestMovieContent {
+.bestFilmContent {
     display: flex;
     flex-direction: column;
     margin-right: 30px;
     margin-left: 20px;
 }
 
-.bestMovieContent p {
+.bestFilmContent p {
     text-align: justify;
     color: #000000;
     font-size: 28px;
@@ -78,7 +78,7 @@ header h1 {
     font-weight: 200;
 }
 
-.bestMovieContent .cta {
+.bestFilmContent .cta {
     align-self: flex-end;
     display: flex;
     align-items: center;
@@ -94,3 +94,5 @@ header h1 {
     text-decoration: none;
     margin-top: 20px;
 }
+
+/* Film category */
