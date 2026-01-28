@@ -81,13 +81,20 @@ async function manageUserChoiceGenre(){
  * @async
  */
 async function manageModalWindow(){
+    const modalWindow = document.getElementById("modal-window");
     document.addEventListener("click", async (e) => {
         if (e.target.matches(".open-modal-button")) {
             const filmId = e.target.id;
             const filmData = await fetchData(`http://localhost:8000/api/v1/titles/${filmId}`);
+            modalWindow.showModal();
             displayModalWindowData(filmData);
         }
     });
+
+    const closeModalButton = document.querySelector(".close-modal-button");
+    closeModalButton.addEventListener("click", () =>{
+        modalWindow.close();
+    })
 }
 
 
@@ -161,25 +168,29 @@ function displayFilmData(cssSelector, filmsArray) {
  * @param {Object} filmData - Complete film data from API
  */
 function displayModalWindowData(filmData) {
-    document.querySelector(".modal-window h2").textContent = filmData.original_title;
-
-    const imageElement = document.querySelector(".modal-window img");
+  
+    const imageElement = document.querySelector("#modal-window img");
     verifyImage(imageElement, filmData)
-    document.querySelector(".modal-window img").alt = `Affiche de ${filmData.original_title}`;
+    document.querySelector("#modal-window img").alt = `Affiche de ${filmData.original_title}`;
 
-    document.querySelector(".film-details-modal-window").innerHTML = `
-        ${filmData.year} - ${filmData.genres.join(", ")}<br>
-        ${filmData.rated} - ${filmData.duration} minutes (${filmData.countries.join(" / ")})<br>
-        IMDB score: ${filmData.imdb_score}/10<br>
-        Recette au box-office: ${filmData.worldwide_gross_income ? `$${filmData.worldwide_gross_income.toLocaleString()}` : "Non disponible"}<br>
-        Réalisé par:</br>
-        <em>${filmData.directors.join(", ")}</em>  
+    document.querySelector("#modal-film-details").innerHTML = `
+        <div class="film-info">
+            <span class="film-title">${filmData.original_title}</br></span>
+            ${filmData.year} - ${filmData.genres.join(", ")}<br>
+            ${filmData.rated} - ${filmData.duration} minutes (${filmData.countries.join(" / ")})<br>
+            IMDB score: ${filmData.imdb_score}/10<br>
+            Recette au box-office: ${filmData.worldwide_gross_income ? `$${filmData.worldwide_gross_income.toLocaleString()}` : "Non disponible"}<br>
+        </div>
+        <div class="film-director">
+        <span class="modal-labels">Réalisé par:</br></span>
+        ${filmData.directors.join(", ")}
+        </div> 
     `;
 
     document.querySelector(".film-synopsis").innerText = filmData.long_description;
 
     document.querySelector(".film-actors").innerHTML = `
-        Avec:<br>
+        <span class="modal-labels">Avec:<br></span>
         ${filmData.actors.join(", ")}
     `;
 }  

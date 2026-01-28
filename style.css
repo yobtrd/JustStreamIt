@@ -1,43 +1,44 @@
 /* General */
 * {
     margin: 0;
+    font-family: "Oswald", sans-serif;
 }
 
-main {
-    width: 90%;
-    max-width: 1200px;
+body {
+    max-width: 835px;
     margin: auto;
+    padding: 10px 50px 50px;
 }
 
-h2 {
+h2,
+form {
     color: #000000;
     font-size: 48px;
-    font-family: "Oswald", sans-serif;
     font-weight: 600;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
+
+.open-modal-button:hover,
+.close-modal-button:hover {
+    opacity: 0.8;
+}
+
 
 /* Banner */
 header {
     display: flex;
-    width: 90%;
-    max-width: 1200px;
+    width: 100%;
     height: 122px;
     align-items: center;
     background-color: #61787F;
     border: 1px solid #000000;
-    margin: auto;
-    margin-top: 40px;
-    margin-bottom: 10px;
-
 }
 
 header h1 {
     display: block;
     color: #FFFFFF;
     font-size: 40px;
-    font-family: "Oswald", sans-serif;
     font-weight: 300;
 }   
 
@@ -57,8 +58,13 @@ header h1 {
     display: flex; 
 }
 
+.bestFilm h2 {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
 .bestFilm img {
-    margin: 10px 15px 10px 15px;
+    margin: 10px 15px 10px;
     width: 227px;
     height: 334px;
 }
@@ -74,25 +80,183 @@ header h1 {
     text-align: justify;
     color: #000000;
     font-size: 28px;
-    font-family: "Oswald", sans-serif;
     font-weight: 200;
 }
 
-.bestFilmContent .cta {
-    align-self: flex-end;
+.bestFilm .open-modal-button {
     display: flex;
+    align-self: flex-end;
     align-items: center;
     justify-content: center;
     width: 166px;
     height: 68px;
     background-color: #FA0B0B;
+    border: none;
     border-radius: 25px;
     color: #FFFFFF;
     font-size: 24px;
-    font-family: "Oswald", sans-serif;
     font-weight: 500;
     text-decoration: none;
-    margin-top: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
-/* Film category */
+
+/* Film cards */
+.films-container {
+    display: grid;
+    grid-template-columns: 252px 252px 252px;
+    justify-content: space-between;
+    row-gap: 40px;
+}
+
+.film-card {
+    position: relative;
+}
+
+.film-card img {
+    width:  252px;
+    height: 247px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.film-details {
+    position: absolute;
+    top: 30px;
+    width: 252px;
+    height: 102px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.film-card h3 {   
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: 600;
+    margin-left: 20px;
+    margin-right: 10px;
+    padding-top: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.film-card .open-modal-button {
+    position: absolute;
+    right: 15px;
+    bottom: 10px;
+    justify-content: center;
+    width: 81px;
+    height: 25px;
+    background-color: #2D2C2C;
+    border: none;
+    border-radius: 25px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+
+/* Form */
+.GenreForm {
+    width: 404px;
+    height: 70px;
+    border: 1px solid #000000;
+    background-color: #FFFFFF;
+    margin-bottom: 10px;
+    font-size: 36px;
+    font-weight: 600;
+    padding-left: 20px;
+    margin-left: 20px;
+    appearance: none;
+}
+
+.form-container {
+    position: relative;
+}
+
+.custom-arrow {
+    position: absolute;
+    right: 270px;
+    pointer-events: none;
+    font-size: 36px;
+    font-weight: 400;
+    top: 50%;
+    transform: translateY(-50%); /* Déplace de moitié sa propre hauteur */
+    margin-top: -2px;
+}
+
+/* Modal window */
+#modal-window[open] {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 778px;
+    height: 939px;
+    border: 6px solid #000000;
+    padding: 20px 40px;
+    font-size: 24px;
+    font-weight: 300;
+    position: fixed;
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#modal-window::backdrop {
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+#modal-window img{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 227px;
+    height: 334px;
+}
+
+.film-title {
+    display: block;
+    font-size: 48px;
+    font-weight: 600;
+    word-wrap: break-word;
+    max-width: 500px;
+}
+
+.film-info {
+    font-weight: 600;
+}
+
+.film-director {
+    padding-top: 30px;
+    padding-bottom: 50px;
+}
+
+.modal-labels {
+    font-weight: 400;
+}
+
+.film-actors {
+    font-size: 20px;
+    padding-top: 40px;
+}
+
+.close-modal-button {
+    align-self: center;
+    margin: auto;
+    width: 214px;
+    height: 36px;
+    background-color: #FA0B0B;
+    border: none;
+    border-radius: 25px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 500;
+    text-decoration: none;
+    margin-top: 70px;
+    margin-bottom: 20px;
+}
+
