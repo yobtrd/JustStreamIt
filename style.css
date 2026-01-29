@@ -19,8 +19,78 @@ form {
     margin-bottom: 30px;
 }
 
+/* Button */
+.bestFilm .open-modal-button {
+    display: flex;
+    align-self: flex-end;
+    align-items: center;
+    justify-content: center;
+    width: 166px;
+    height: 68px;
+    background-color: #FA0B0B;
+    border: none;
+    border-radius: 25px;
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: 500;
+    text-decoration: none;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.film-card .open-modal-button {
+    position: absolute;
+    right: 15px;
+    bottom: 10px;
+    justify-content: center;
+    width: 81px;
+    height: 25px;
+    background-color: #2D2C2C;
+    border: none;
+    border-radius: 25px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.close-modal-button {
+    align-self: center;
+    margin: auto;
+    width: 214px;
+    height: 36px;
+    background-color: #FA0B0B;
+    border: none;
+    border-radius: 25px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 500;
+    text-decoration: none;
+    margin-top: 70px;
+    margin-bottom: 20px;
+}
+
+.show-more-button,
+.show-less-button {
+    display: none;
+    margin: auto;
+    width: 214px;
+    height: 36px;
+    background-color: #FA0B0B;
+    border: none;
+    border-radius: 25px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 500;
+    text-decoration: none;
+    margin-top: 30px;
+}
+
+
 .open-modal-button:hover,
-.close-modal-button:hover {
+.close-modal-button:hover,
+.show-more-button:hover,
+.show-less-button:hover {
     opacity: 0.8;
 }
 
@@ -83,31 +153,13 @@ header h1 {
     font-weight: 200;
 }
 
-.bestFilm .open-modal-button {
-    display: flex;
-    align-self: flex-end;
-    align-items: center;
-    justify-content: center;
-    width: 166px;
-    height: 68px;
-    background-color: #FA0B0B;
-    border: none;
-    border-radius: 25px;
-    color: #FFFFFF;
-    font-size: 24px;
-    font-weight: 500;
-    text-decoration: none;
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
-
 /* Film cards */
 .films-container {
     display: grid;
     grid-template-columns: 252px 252px 252px;
     justify-content: space-between;
     row-gap: 40px;
+    column-gap: 15px;
 }
 
 .film-card {
@@ -141,26 +193,10 @@ header h1 {
     text-overflow: ellipsis;
 }
 
-.film-card .open-modal-button {
-    position: absolute;
-    right: 15px;
-    bottom: 10px;
-    justify-content: center;
-    width: 81px;
-    height: 25px;
-    background-color: #2D2C2C;
-    border: none;
-    border-radius: 25px;
-    color: #FFFFFF;
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-}
-
-
 /* Form */
 .GenreForm {
-    width: 404px;
+    width: auto;
+    max-width: 404px;
     height: 70px;
     border: 1px solid #000000;
     background-color: #FFFFFF;
@@ -172,19 +208,20 @@ header h1 {
     appearance: none;
 }
 
-.form-container {
-    position: relative;
+.select-wrapper {
+  position: relative;
+  display: inline-block;
 }
 
-.custom-arrow {
-    position: absolute;
-    right: 270px;
-    pointer-events: none;
-    font-size: 36px;
-    font-weight: 400;
-    top: 50%;
-    transform: translateY(-50%); /* Déplace de moitié sa propre hauteur */
-    margin-top: -2px;
+.select-wrapper::after {
+  content: "▼";
+  position: absolute;
+  right: 15px;
+  top: 45%;
+  transform: translateY(-50%);
+  font-size: 36px;
+  font-weight: 400;
+  pointer-events: none;
 }
 
 /* Modal window */
@@ -192,14 +229,13 @@ header h1 {
     display: flex;
     flex-direction: column;
     position: relative;
-    width: 778px;
-    height: 939px;
+    height: auto;
+    min-height: 650px;
+    width: 50vw;
     border: 6px solid #000000;
     padding: 20px 40px;
     font-size: 24px;
     font-weight: 300;
-    position: fixed;
-    margin: 0;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -218,15 +254,14 @@ header h1 {
     height: 334px;
 }
 
+.film-info {
+    font-weight: 600;
+    padding-right: 300px;
+}
+
 .film-title {
     display: block;
     font-size: 48px;
-    font-weight: 600;
-    word-wrap: break-word;
-    max-width: 500px;
-}
-
-.film-info {
     font-weight: 600;
 }
 
@@ -244,19 +279,140 @@ header h1 {
     padding-top: 40px;
 }
 
-.close-modal-button {
-    align-self: center;
-    margin: auto;
-    width: 214px;
-    height: 36px;
-    background-color: #FA0B0B;
-    border: none;
-    border-radius: 25px;
-    color: #FFFFFF;
-    font-size: 20px;
-    font-weight: 500;
-    text-decoration: none;
-    margin-top: 70px;
-    margin-bottom: 20px;
+/* Responsive */
+@media screen and (max-width: 550px) {
+    h2,
+    form {
+        font-size: 32px;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 5px;
+    }
+
+    header h1 {
+        display: none;
+    }
+    header {
+        justify-content: center;
+    }
+
+    .logo {
+        margin: 0px;
+    }
+
+    .bestFilm {
+        flex-direction: column;
+    }
+
+    .bestFilm h2 {
+        text-align: left;
+    }
+
+    .bestFilm p {
+        font-size: 16px;
+    }
+
+    .bestFilm img {
+        width: 90%;
+        height: 241px;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .bestFilm .open-modal-button {
+        align-self: center;
+        width: 91px;
+        height: 40px;
+        font-size: 14px;
+    }
+
+    .films-container {
+        grid-template-columns: 252px;
+        justify-content: center;
+        height: 534px;
+        overflow: hidden;
+    }   
+
+    .GenreForm {
+        margin-left: 0px;
+        margin-top: 30px;
+    }
+
+    .show-more-button {
+        display: block;
+    }
+
+    #modal-window[open] {
+         width: 70vw;
+    }
+
+    #modal-window img {
+        position: relative;
+        top: 30px;
+        right: 0px;
+        width: 100%;
+        height: auto;
+    }
+
+    .film-info {
+        padding-right: 0px;
+    }
+
+    .select-wrapper::after {
+        top: 60%;
+    }
 }
 
+@media (min-width: 550px) and (max-width: 850px) {
+    h2,
+    form {
+        font-size: 40px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .bestFilm p {
+        font-size: 24px;
+    }
+
+    .bestFilm img {
+        width: 168px;
+        height: 246px;
+    }
+
+    .bestFilm .open-modal-button {
+        width: 123px;
+        height: 49px;
+        font-size: 20px;
+        margin-top: 5px;
+    }
+
+    .films-container {
+        grid-template-columns: 252px 252px;
+        justify-content: center;
+        height: 534px;
+        overflow: hidden;
+        gap: 30px;
+        row-gap: 30px;
+    }   
+
+    .show-more-button {
+        display: block;
+    }
+
+    #modal-window[open] {
+         width: 70vw;
+    }
+
+    #modal-window img {
+        position: relative;
+        top: 30px;
+        right: 0px;
+        width: 100%;
+        height: auto;
+    }
+
+    .film-info {
+        padding-right: 0px;
+    }
+}

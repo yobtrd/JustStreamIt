@@ -78,43 +78,56 @@
                     </div>
                 </div>
             </div>
+            <div class="responsive-controls">
+                <button class="show-more-button">Voir plus</button>
+                <button class="show-less-button">Voir moins</button>
+            </div>
         </section>
         <section id="film-category-one">
             <h2>Catégorie 1</h2>
             <div class="films-container">
+            </div>
+            <div class="responsive-controls">
+                <button class="show-more-button">Voir plus</button>
+                <button class="show-less-button">Voir moins</button>
             </div>
         </section>
         <section id="film-category-two">
             <h2>Catégorie 2</h2>
             <div class="films-container">
             </div>
+            <div class="responsive-controls">
+                <button class="show-more-button">Voir plus</button>
+                <button class="show-less-button">Voir moins</button>
+            </div>
         </section>
         <section id="user-choice-film-category">
             <form method="post" action="">
-                <div class ="form-container">
-                    <label for="genre">Autres :</label>
+                <label for="genre">Autres :</label>
+                <div class="select-wrapper">
                     <select name="genre" id="genre" class="GenreForm">
                     </select>
-                    <span class="custom-arrow">▼</span>
                 </div>
             </form>
             <div class="films-container">
             </div>
+            <div class="responsive-controls">
+                <button class="show-more-button">Voir plus</button>
+                <button class="show-less-button">Voir moins</button>
+            </div>
         </section>
         <!-- modal window-->
         <dialog id="modal-window">
-            <img src ="images/no-img.png" alt="Affiche du film choisi">
-            <div>
-                <div id="modal-film-details">
-                    <div class="film-info">
-                    </div>
-                    <div class="film-director">
-                    </div>
+            <div id="modal-film-details">
+                <div class="film-info">
+                </div>
+                <div class="film-director">
                 </div>
             </div>
             <div>
                 <p class="film-synopsis">
                 </p>
+                <img src ="images/no-img.png" alt="Affiche du film choisi">
                 <p class="film-actors">
                 </p>
             </div>

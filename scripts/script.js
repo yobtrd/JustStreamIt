@@ -67,7 +67,7 @@ async function manageTopRatedFilmsByGenre(genreChosen, id) {
 async function manageUserChoiceGenre(){
     manageTopRatedFilmsByGenre("action", "#user-choice-film-category")
     getAllGenreList()
-    let userChoiceGenre = document.getElementById("genre")
+    let userChoiceGenre = document.getElementById("genre");
     userChoiceGenre.addEventListener("change", () => {
         manageTopRatedFilmsByGenre(userChoiceGenre.value, "#user-choice-film-category")
     })
@@ -87,6 +87,7 @@ async function manageModalWindow(){
             const filmId = e.target.id;
             const filmData = await fetchData(`http://localhost:8000/api/v1/titles/${filmId}`);
             modalWindow.showModal();
+            window.scrollTo(0, 0);
             displayModalWindowData(filmData);
         }
     });
@@ -149,8 +150,8 @@ async function fetchMultiplePagesData(endpoint, maxPage) {
  * @param {Array} filmsArray - Films data to display
  */
 function displayFilmData(cssSelector, filmsArray) {
-    const titleElements = document.querySelectorAll(`${cssSelector} h3`)
-    const imageElements = document.querySelectorAll(`${cssSelector} img`)
+    const titleElements = document.querySelectorAll(`${cssSelector} h3`);
+    const imageElements = document.querySelectorAll(`${cssSelector} img`);
     for (let i = 0; i < filmsArray.length; i++){
        titleElements[i].textContent = filmsArray[i].title;
        verifyImage(imageElements[i], filmsArray[i])
@@ -195,7 +196,6 @@ function displayModalWindowData(filmData) {
     `;
 }  
 
-
 /**
  * Fetches and displays all genre list from API to HTML form
  * @async
@@ -208,7 +208,7 @@ async function getAllGenreList() {
 
     for (let genre of allGenreArray) {
         let newOption = document.createElement("option");
-        let translatedGenre = getTranslatedGenre(genre.name)
+        let translatedGenre = getTranslatedGenre(genre.name);
         newOption.value = genre.name;
         newOption.textContent = translatedGenre;
         parentElement.appendChild(newOption);
@@ -224,8 +224,34 @@ function refreshFilmContainer(id, films) {
     const container = document.querySelector(`${id} .films-container`);
     container.innerHTML = '';
     for (let i = 0; i < films.length; i++){
-        let filmCards = createFilmCard()
+        let filmCards = createFilmCard();
         container.appendChild(filmCards);
+    }
+}
+
+/**
+ * Toggles film container height and button visibility for responsive behavior.
+ * - Expands container and shows 'Show Less' button when 'Show More' clicked
+ * - Collapses container and shows 'Show More' button when 'Show Less' clicked
+ */
+function responsiveControls() {
+    const showMoreButton = document.querySelectorAll(".show-more-button");
+    const showLessButton = document.querySelectorAll(".show-less-button");
+    const filmContainer = document.querySelectorAll(".films-container");
+    for (let i = 0; i < showMoreButton.length; i++){
+        showMoreButton[i].addEventListener("click", () => {
+            filmContainer[i].style.setProperty("height", "unset");
+            filmContainer[i].style.setProperty("overflow", "unset");
+            showMoreButton[i].style.setProperty("display", "none");
+            showLessButton[i].style.setProperty("display", "block");
+        })
+    }
+    for (let i = 0; i < showLessButton.length; i++){
+        showLessButton[i].addEventListener("click", () => {
+            filmContainer[i].removeAttribute('style');
+            showMoreButton[i].style.setProperty("display", "block");
+            showLessButton[i].style.setProperty("display", "none");
+        })
     }
 }
 
