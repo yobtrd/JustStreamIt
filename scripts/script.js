@@ -12,7 +12,7 @@ async function manageBestFilm() {
     document.querySelector("div h2").textContent = bestFilm.title;
 
     const imageElement = document.querySelector(".bestFilm img");
-    verifyImage(imageElement, bestFilm)
+    checkAndLoadImage(imageElement, bestFilm);
     imageElement.alt = `Affiche de ${bestFilm.title}`;
 
     const bestFilmData = await fetchData(`http://localhost:8000/api/v1/titles/${bestFilm.id}`);
@@ -28,10 +28,12 @@ async function manageBestFilm() {
  * @returns {void} Modifies films data for top rated films
  */
 async function manageTopRatedFilms() {
-    let topRatedFilmsArray = await fetchMultiplePagesData("http://localhost:8000/api/v1/titles/?sort_by=-imdb_score&page=", 3);
-    topRatedFilmsArray = topRatedFilmsArray.slice(1, 7);
+    let topRatedFilmsArray = await fetchData("http://localhost:8000/api/v1/titles/?page_size=7&sort_by=-imdb_score");
+    topRatedFilmsArray = topRatedFilmsArray.results.slice(1, 7);
 
-    displayFilmData("#top-rated-films", topRatedFilmsArray);
+    const container = document.querySelector("#top-rated-films .films-container");
+    container.innerHTML = "";
+    container.appendChild(generateFilmCards(topRatedFilmsArray));
 }
 
 /**
@@ -42,18 +44,19 @@ async function manageTopRatedFilms() {
  * @returns {void} Modifies film datas for category choosen
  */
 async function manageTopRatedFilmsByGenre(genreChosen, id) {
-    let bestFilmCategoryArray = await fetchMultiplePagesData(`http://localhost:8000/api/v1/titles/?sort_by=-imdb_score&genre=${genreChosen}&page=`, 3);
-    bestFilmCategoryArray = bestFilmCategoryArray.slice(0, 6);
+    let bestFilmCategoryArray = await fetchData(`http://localhost:8000/api/v1/titles/?page_size=6&sort_by=-imdb_score&genre=${genreChosen}`);
 
-    // Translated Genre Title for category 1 and 2
-    const GenreTraducted = getTranslatedGenre(genreChosen)
-    const GenreTitle = document.querySelector(`${id} h2`)
+    // Translated Genre Title for genre category 1 and 2
+    const GenreTraducted = getTranslatedGenre(genreChosen);
+    const GenreTitle = document.querySelector(`${id} h2`);
     if (GenreTitle) {
         GenreTitle.textContent = GenreTraducted;
     }
 
-    refreshFilmContainer(id, bestFilmCategoryArray)
-    displayFilmData(id, bestFilmCategoryArray)
+    const container = document.querySelector(`${id} .films-container`);
+    container.innerHTML = "";
+    container.appendChild(generateFilmCards(bestFilmCategoryArray.results));
+
 }
 
 /**
@@ -64,36 +67,39 @@ async function manageTopRatedFilmsByGenre(genreChosen, id) {
  * @async
  * @returns {void>} Modifies film datas for category choosen
  */
-async function manageUserChoiceGenre(){
-    manageTopRatedFilmsByGenre("action", "#user-choice-film-category")
-    getAllGenreList()
+async function manageUserChoiceGenre() {
+    manageTopRatedFilmsByGenre("action", "#user-choice-film-category");
+    getAllGenreList();
     let userChoiceGenre = document.getElementById("genre");
     userChoiceGenre.addEventListener("change", () => {
-        manageTopRatedFilmsByGenre(userChoiceGenre.value, "#user-choice-film-category")
+        manageTopRatedFilmsByGenre(userChoiceGenre.value, "#user-choice-film-category");
+        userChoiceGenre.focus({
+            preventScroll: true
+        });
     })
 }
 
 /**
  * Handles modal button click events
- * - Listens for clicks on '.open-modal-button' elements
+ * - Listens for clicks on ".open-modal-button" elements
  * - Fetches film data by ID from API
  * - Displays modal with populated film data
  * @async
  */
-async function manageModalWindow(){
+async function manageModalWindow() {
     const modalWindow = document.getElementById("modal-window");
     document.addEventListener("click", async (e) => {
         if (e.target.matches(".open-modal-button")) {
             const filmId = e.target.id;
             const filmData = await fetchData(`http://localhost:8000/api/v1/titles/${filmId}`);
             modalWindow.showModal();
-            window.scrollTo(0, 0);
+            modalWindow.scrollTop = 0;
             displayModalWindowData(filmData);
         }
     });
 
     const closeModalButton = document.querySelector(".close-modal-button");
-    closeModalButton.addEventListener("click", () =>{
+    closeModalButton.addEventListener("click", () => {
         modalWindow.close();
     })
 }
@@ -121,45 +127,32 @@ async function fetchData(endpoint) {
 }
 
 /**
- * Performs concurrent HTTP requests across multiple paginated endpoints
- * @async
- * @param {string} endpoint - Base API URL (page number will be appended)
- * @param {number} maxPage - Maximum page number to fetch
- * @returns {Array} Combined results from all requested pages
+ * Generates complete film cards with populated data in a single pass
+ * @param {Array<Object>} filmsData - Array of film objects containing title, id, etc.
+ * @returns {DocumentFragment} Lightweight DOM fragment containing all generated cards
  */
-async function fetchMultiplePagesData(endpoint, maxPage) {
-    let allDataArray = [];
-    let currentPage = 1;
-    let pageData;
-    while (currentPage < maxPage && (pageData = await fetchData(`${endpoint}${currentPage}`))) {
-        if (!pageData?.results) {
-            break;
-        }
-        allDataArray.push(...pageData.results);
-        if (!pageData.next) {
-            break;
-        }
-        currentPage++;
-    }
-    return allDataArray
-}
+function generateFilmCards(filmsData) {
+    const fragment = document.createDocumentFragment();
 
-/**
- * Populates film cards with data
- * @param {string} cssSelector - Container selector for cards
- * @param {Array} filmsArray - Films data to display
- */
-function displayFilmData(cssSelector, filmsArray) {
-    const titleElements = document.querySelectorAll(`${cssSelector} h3`);
-    const imageElements = document.querySelectorAll(`${cssSelector} img`);
-    for (let i = 0; i < filmsArray.length; i++){
-       titleElements[i].textContent = filmsArray[i].title;
-       verifyImage(imageElements[i], filmsArray[i])
-       imageElements[i].alt = `Affiche de ${filmsArray[i].title}`;
+    filmsData.forEach(film => {
+        const card = document.createElement("div");
+        card.className = "film-card";
+        card.innerHTML = `
+        <img src="" alt="Affiche de ${film.title}">
+        
+        <div class="film-details">
+            <h3>${film.title}</h3>
+            <button class="open-modal-button" id="${film.id}">Détails</button>
+        </div>
+        `;
 
-       const detailsButtons = document.querySelectorAll(`${cssSelector} .open-modal-button`);
-       detailsButtons[i].id = filmsArray[i].id;
-    }
+        const imageElement = card.querySelector("img");
+        checkAndLoadImage(imageElement, film);
+
+        fragment.appendChild(card);
+    });
+
+    return fragment;
 }
 
 /**
@@ -169,9 +162,9 @@ function displayFilmData(cssSelector, filmsArray) {
  * @param {Object} filmData - Complete film data from API
  */
 function displayModalWindowData(filmData) {
-  
+
     const imageElement = document.querySelector("#modal-window img");
-    verifyImage(imageElement, filmData)
+    checkAndLoadImage(imageElement, filmData);
     document.querySelector("#modal-window img").alt = `Affiche de ${filmData.original_title}`;
 
     document.querySelector("#modal-film-details").innerHTML = `
@@ -194,7 +187,7 @@ function displayModalWindowData(filmData) {
         <span class="modal-labels">Avec:<br></span>
         ${filmData.actors.join(", ")}
     `;
-}  
+}
 
 /**
  * Fetches and displays all genre list from API to HTML form
@@ -202,11 +195,11 @@ function displayModalWindowData(filmData) {
  * @returns {void} Modifies all options form options 
  */
 async function getAllGenreList() {
-    let allGenreArray = await fetchMultiplePagesData("http://localhost:8000/api/v1/genres/?page=", 10)
-    let parentElement = document.getElementById("genre")
-    parentElement.innerHTML = '';
+    let allGenreArray = await fetchData("http://localhost:8000/api/v1/genres/?page_size=50");
+    let parentElement = document.getElementById("genre");
+    parentElement.innerHTML = "";
 
-    for (let genre of allGenreArray) {
+    for (let genre of allGenreArray.results) {
         let newOption = document.createElement("option");
         let translatedGenre = getTranslatedGenre(genre.name);
         newOption.value = genre.name;
@@ -216,54 +209,30 @@ async function getAllGenreList() {
 }
 
 /**
- * Clears and repopulates film container with empty cards
- * @param {string} id - CSS selector for parent container
- * @param {Array} films - Array of films (length determines card count)
- */
-function refreshFilmContainer(id, films) {
-    const container = document.querySelector(`${id} .films-container`);
-    container.innerHTML = '';
-    for (let i = 0; i < films.length; i++){
-        let filmCards = createFilmCard();
-        container.appendChild(filmCards);
-    }
-}
-
-/**
  * Toggles film container height and button visibility for responsive behavior.
- * - Expands container and shows 'Show Less' button when 'Show More' clicked
- * - Collapses container and shows 'Show More' button when 'Show Less' clicked
+ * - Expands container and shows "Show Less" button when "Show More" clicked
+ * - Collapses container and shows "Show More" button when "Show Less" clicked
  */
-function responsiveControls() {
-    const showMoreButton = document.querySelectorAll(".show-more-button");
-    const showLessButton = document.querySelectorAll(".show-less-button");
-    const filmContainer = document.querySelectorAll(".films-container");
-    for (let i = 0; i < showMoreButton.length; i++){
-        showMoreButton[i].addEventListener("click", () => {
-            filmContainer[i].style.setProperty("height", "unset");
-            filmContainer[i].style.setProperty("overflow", "unset");
-            showMoreButton[i].style.setProperty("display", "none");
-            showLessButton[i].style.setProperty("display", "block");
-        })
-    }
-    for (let i = 0; i < showLessButton.length; i++){
-        showLessButton[i].addEventListener("click", () => {
-            filmContainer[i].removeAttribute('style');
-            showMoreButton[i].style.setProperty("display", "block");
-            showLessButton[i].style.setProperty("display", "none");
-        })
-    }
-}
+function manageResponsiveControls() {
+    document.addEventListener("click", (e) => {
+        if (!e.target.matches(".show-more-button, .show-less-button")) return;
 
+        const responsiveButtons = e.target.closest(".responsive-buttons");
+        const container = responsiveButtons.previousElementSibling;
+        const [showMoreButton, showLessButton] = responsiveButtons.children;
 
-// III. Helpers
-
-/**
- * Translate the film genre from English to French
- * @returns {string} The translation or fallback in English if no translation found
- */
-function getTranslatedGenre(englishName) {
-  return genreTranslations[englishName] || englishName;
+        if (e.target === showMoreButton) {
+            container.style.height = "unset";
+            container.style.overflow = "unset";
+            showMoreButton.style.display = "none";
+            showLessButton.style.display = "block";
+        } else {
+            container.style.height = "";
+            container.style.overflow = "";
+            showMoreButton.style.display = "block";
+            showLessButton.style.display = "none";
+        }
+    });
 }
 
 /**
@@ -273,30 +242,21 @@ function getTranslatedGenre(englishName) {
  * @param {Object} endpoint - API response object containing image_url
  * @returns {void}
  */
-async function verifyImage(imageElement, endpoint){
+async function checkAndLoadImage(imageElement, endpoint) {
     const testImage = new Image();
     testImage.onload = () => {
-    imageElement.src = endpoint.image_url;
+        imageElement.src = endpoint.image_url;
     };
     testImage.onerror = () => {
-    imageElement.src = "images/no-img.png"; 
+        imageElement.src = "images/no-img.png";
     };
     testImage.src = endpoint.image_url;
 }
 
 /**
- * Creates an empty movie card template
- * @returns {HTMLDivElement} The basic HTML structure of a card
+ * Translate the film genre from English to French
+ * @returns {string} The translation or fallback in English if no translation found
  */
-function createFilmCard() {
-    const card = document.createElement('div');
-    card.className = 'film-card';
-    card.innerHTML = `
-        <img src="" alt="Affiche du film">
-        <div class="film-details">
-            <h3></h3>
-            <button class="open-modal-button">Détails</button>
-        </div>
-    `;
-    return card;
+function getTranslatedGenre(englishName) {
+    return genreTranslations[englishName] || englishName;
 }
